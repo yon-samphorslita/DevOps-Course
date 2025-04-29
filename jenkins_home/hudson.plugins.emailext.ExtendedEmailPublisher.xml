@@ -3,7 +3,7 @@
   <mailAccount>
     <smtpHost>smtp.gmail.com</smtpHost>
     <smtpPort>465</smtpPort>
-    <useSsl>false</useSsl>
+    <useSsl>true</useSsl>
     <useTls>false</useTls>
     <advProperties></advProperties>
     <defaultAccount>true</defaultAccount>

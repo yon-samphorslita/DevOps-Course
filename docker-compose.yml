@@ -1,15 +1,25 @@
-# version: '3.8'
-
+# docker-compose.yml
+# version: '3.7'
 services:
   jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
     ports:
-      - "8082:8080"
-      - "50000:50000"
+      - 8083:8080
+      - 50000:50000
+    container_name: jenkins-tp02-i4d
     volumes:
-      - /home/lita/Desktop/Devops/laravel-project/i42025-website/jenkins_home:/var/jenkins_home
-
-volumes:
-  jenkins_home:
+      - "/home/lita/Desktop/Devops/jenkins_home:/var/jenkins_home"
+    links:
+      - "laravel-agent:laravel"
+  laravel-agent:
+    build: ./laravel-agent
+    image: i4d/jenkins-agent:latest
+    container_name: jenkins-laravel-agent-I4D
+    environment:
+      - JENKINS_URL=http://localhost:8083
+      - JENKINS_AGENT_NAME=laravel-agent-I4D
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCtVStXwjCai1/b0C1P6UxXjxWIwYKNXJ75sN1GScRzpcPPpLUlYA/cpAvViGgs036Gnj3625DgbEKy8kB0ETkhNt8923TA515+stHwG9+zJPWNRA3H/9+qi9D0PERakcaqbrRbtdNGqyC7yrDkWYDEGTTSD8CBNkFTbim5wVhNkGVnOhhz/bOaIcE4XIw+yWIfht45QOasN856Zo1dkcQ7RV05KrPLFCLdmapMSd67UobpOktp8LaETChT7TexvdmFj+4IkQWGhgxydH+V7e0WoslVqxbLXBF1nmSRkfwNm5aqBy3lLdutQnboPS6gcsrK38Z94Rvamzl5OUlve4IyBs0hTOqY+INwF7R8AFxGvXVOzq3evAHvs+oTX2bjwTelaP+Y5CKLcsyJ8Gxcqaa5b1DNckOrJxDjJgUfjp/MtXCivt6+B1C3oH8DhXVrq8HYZNgURN3YXaRzcHbJ67FndgcWBYimpRgMIX1FXObJlCmnwH0X2UmtWJ9ldkThBC15TJDXx3F1ktmmPjUVSkNgUBCZLdJwHYD4ks8PidU8XjP09DqoSteoPfzIbhEdmTb3u022Kx5X7KP1ji/p8rmDPus0Brp50mogIQnXjgQNasux9nQds5mujtupwFWMKZwJ2iW02fvBQ5GwFPYFTqLo7HKCVeRExl32cBjk+Kkfuw== yonsamphorslita@lita
+    volumes:
+      - "/home/lita/Desktop/Devops/jenkins_home:/var/jenkins_home"
